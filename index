@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Amiguística</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #4e54c8, #8f94fb);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .instructions {
+            background-color: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+        
+        .rating {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .rating-option {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .rating-option input {
+            display: none;
+        }
+        
+        .rating-option label {
+            display: block;
+            padding: 12px 5px;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            font-weight: 500;
+        }
+        
+        .rating-option input:checked + label {
+            background: linear-gradient(to bottom, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-color: #3498db;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .rating-option label:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .reflection-section {
+            background-color: #f9fbe7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            border: 1px solid #e6ee9c;
+        }
+        
+        .reflection-section h2 {
+            color: #827717;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #5d4037;
+        }
+        
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 80px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        .form-group textarea:focus {
+            border-color: #4e54c8;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(78, 84, 200, 0.2);
+        }
+        
+        .bonus-section {
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            background-color: #fff8e1;
+            border-radius: 10px;
+        }
+        
+        .bonus-section h2 {
+            color: #ff8f00;
+            margin-bottom: 15px;
+        }
+        
+        .bonus-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .bonus-option {
+            flex-basis: calc(50% - 15px);
+            min-width: 200px;
+        }
+        
+        .bonus-option input {
+            display: none;
+        }
+        
+        .bonus-option label {
+            display: block;
+            padding: 15px;
+            background-color: #fff3e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            font-weight: 500;
+        }
+        
+        .bonus-option input:checked + label {
+            background: linear-gradient(to bottom, #ff9a9e 0%, #fad0c4 100%);
+            color: #333;
+            border-color: #ff8f00;
+            transform: scale(1.05);
+        }
+        
+        .btn-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            background: linear-gradient(to right, #4e54c8, #8f94fb);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .results {
+            display: none;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .score-display {
+            font-size: 5rem;
+            font-weight: 800;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+        }
+        
+        .result-title {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #ffcc00;
+        }
+        
+        .result-description {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+        
+        .result-level {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-top: 25px;
+            color: #ffcc00;
+            text-transform: uppercase;
+        }
+        
+        .restart-btn {
+            background: white;
+            color: #4e54c8;
+            margin-top: 20px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 0.9rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .rating {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .bonus-options {
+                flex-direction: column;
+            }
+            
+            .bonus-option {
+                flex-basis: 100%;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .score-display {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-heart"></i> Evaluación Amiguística</h1>
+            <p class="subtitle">Descubre tu nivel como amigo/a con este test de autoevaluación</p>
+        </header>
+        
+        <div class="form-container">
+            <div class="instructions">
+                <p><i class="fas fa-info-circle"></i> Evalúa tus habilidades sociales del 1 al 5, siendo 1 = "Casi nunca" y 5 = "Siempre"</p>
+            </div>
+            
+            <form id="friendship-form">
+                <!-- Pregunta 1 -->
+                <div class="question">
+                    <div class="question-text">1. Escucho activamente cuando otros hablan (sin interrumpir).</div>
+                    <div class="rating">
+                        <div class="rating-option">
+                            <input type="radio" name="p1" value="1" id="p1-1">
+                            <label for="p1-1">1</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p1" value="2" id="p1-2">
+                            <label for="p1-2">2</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p1" value="3" id="p1-3">
+                            <label for="p1-3">3</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p1" value="4" id="p1-4">
+                            <label for="p1-4">4</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p1" value="5" id="p1-5">
+                            <label for="p1-5">5</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 2 -->
+                <div class="question">
+                    <div class="question-text">2. Recuerdo detalles importantes de la vida de mis amigos (cumples, gustos, problemas).</div>
+                    <div class="rating">
+                        <div class="rating-option">
+                            <input type="radio" name="p2" value="1" id="p2-1">
+                            <label for="p2-1">1</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p2" value="2" id="p2-2">
+                            <label for="p2-2">2</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p2" value="3" id="p2-3">
+                            <label for="p2-3">3</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p2" value="4" id="p2-4">
+                            <label for="p2-4">4</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p2" value="5" id="p2-5">
+                            <label for="p2-5">5</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 3 -->
+                <div class="question">
+                    <div class="question-text">3. Inicio planes o contacto para quedar (no espero a que otros lo hagan).</div>
+                    <div class="rating">
+                        <div class="rating-option">
+                            <input type="radio" name="p3" value="1" id="p3-1">
+                            <label for="p3-1">1</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p3" value="2" id="p3-2">
+                            <label for="p3-2">2</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p3" value="3" id="p3-3">
+                            <label for="p3-3">3</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p3" value="4" id="p3-4">
+                            <label for="p3-4">4</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p3" value="5" id="p3-5">
+                            <label for="p3-5">5</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 4 -->
+                <div class="question">
+                    <div class="question-text">4. Ofrezco apoyo emocional cuando alguien lo necesita (con palabras o acciones).</div>
+                    <div class="rating">
+                        <div class="rating-option">
+                            <input type="radio" name="p4" value="1" id="p4-1">
+                            <label for="p4-1">1</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p4" value="2" id="p4-2">
+                            <label for="p4-2">2</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p4" value="3" id="p4-3">
+                            <label for="p4-3">3</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p4" value="4" id="p4-4">
+                            <label for="p4-4">4</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p4" value="5" id="p4-5">
+                            <label for="p4-5">5</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 5 -->
+                <div class="question">
+                    <div class="question-text">5. Soy respetuoso con opiniones diferentes a las mías.</div>
+                    <div class="rating">
+                        <div class="rating-option">
+                            <input type="radio" name="p5" value="1" id="p5-1">
+                            <label for="p5-1">1</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p5" value="2" id="p5-2">
+                            <label for="p5-2">2</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p5" value="3" id="p5-3">
+                            <label for="p5-3">3</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p5" value="4" id="p5-4">
+                            <label for="p5-4">4</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p5" value="5" id="p5-5">
+                            <label for="p5-5">5</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 6 -->
+                <div class="question">
+                    <div class="question-text">6. Celebro los logros de mis amigos con sinceridad.</div>
+                    <div class="rating">
+                        <div class="rating-option">
+                            <input type="radio" name="p6" value="1" id="p6-1">
+                            <label for="p6-1">1</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p6" value="2" id="p6-2">
+                            <label for="p6-2">2</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p6" value="3" id="p6-3">
+                            <label for="p6-3">3</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p6" value="4" id="p6-4">
+                            <label for="p6-4">4</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p6" value="5" id="p6-5">
+                            <label for="p6-5">5</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 7 -->
+                <div class="question">
+                    <div class="question-text">7. Pido disculpas si cometo un error que afecta a otros.</div>
+                    <div class="rating">
+                        <div class="rating-option">
+                            <input type="radio" name="p7" value="1" id="p7-1">
+                            <label for="p7-1">1</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p7" value="2" id="p7-2">
+                            <label for="p7-2">2</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p7" value="3" id="p7-3">
+                            <label for="p7-3">3</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p7" value="4" id="p7-4">
+                            <label for="p7-4">4</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p7" value="5" id="p7-5">
+                            <label for="p7-5">5</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pregunta 8 -->
+                <div class="question">
+                    <div class="question-text">8. Mantengo confidencialidad sobre lo que me comparten.</div>
+                    <div class="rating">
+                        <div class="rating-option">
+                            <input type="radio" name="p8" value="1" id="p8-1">
+                            <label for="p8-1">1</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p8" value="2" id="p8-2">
+                            <label for="p8-2">2</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p8" value="3" id="p8-3">
+                            <label for="p8-3">3</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p8" value="4" id="p8-4">
+                            <label for="p8-4">4</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="p8" value="5" id="p8-5">
+                            <label for="p8-5">5</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sección de reflexión -->
+                <div class="reflection-section">
+                    <h2><i class="fas fa-lightbulb"></i> Sección de Reflexión</h2>
+                    
+                    <div class="form-group">
+                        <label for="fortaleza">Mi mayor fortaleza como amigo/a:</label>
+                        <textarea id="fortaleza" placeholder="Ejemplo: Soy bueno dando consejos prácticos"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mejorar">Algo que quiero mejorar:</label>
+                        <textarea id="mejorar" placeholder="Ejemplo: Debería preguntar más cómo se sienten"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="accion">Una acción concreta para ser mejor amigo esta semana:</label>
+                        <textarea id="accion" placeholder="Ejemplo: Llamaré a X para saber cómo sigue después de su entrevista"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Sección Bonus -->
+                <div class="bonus-section">
+                    <h2><i class="fas fa-star"></i> Bonus: Nivel "Amiguístico" alcanzado</h2>
+                    <p>¿Qué nivel crees que tienes como amigo/a?</p>
+                    
+                    <div class="bonus-options">
+                        <div class="bonus-option">
+                            <input type="radio" name="nivel" value="principiante" id="nivel1">
+                            <label for="nivel1">Principiante</label>
+                        </div>
+                        <div class="bonus-option">
+                            <input type="radio" name="nivel" value="confiable" id="nivel2">
+                            <label for="nivel2">Compañero fiable</label>
+                        </div>
+                        <div class="bonus-option">
+                            <input type="radio" name="nivel" value="alma" id="nivel3">
+                            <label for="nivel3">Alma de la amistad</label>
+                        </div>
+                        <div class="bonus-option">
+                            <input type="radio" name="nivel" value="sabio" id="nivel4">
+                            <label for="nivel4">Sabio de los vínculos</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="btn-container">
+                    <button type="button" class="btn" id="evaluate-btn">
+                        <i class="fas fa-calculator"></i> Evaluar mi desempeño amiguístico
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Sección de Resultados -->
+        <div class="results" id="results-section">
+            <div class="score-display" id="total-score">0</div>
+            <h2 class="result-title" id="result-title">Tu resultado</h2>
+            <p class="result-description" id="result-description"></p>
+            <div class="result-level" id="amiguistic-level"></div>
+            
+            <div class="btn-container">
+                <button type="button" class="btn restart-btn" id="restart-btn">
+                    <i class="fas fa-redo"></i> Realizar otra evaluación
+                </button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Formulario de autoevaluación amistosa - ¡Todos podemos mejorar nuestras relaciones!</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const evaluateBtn = document.getElementById('evaluate-btn');
+            const restartBtn = document.getElementById('restart-btn');
+            const resultsSection = document.getElementById('results-section');
+            const totalScoreEl = document.getElementById('total-score');
+            const resultTitle = document.getElementById('result-title');
+            const resultDescription = document.getElementById('result-description');
+            const amiguisticLevel = document.getElementById('amiguistic-level');
+            
+            evaluateBtn.addEventListener('click', function() {
+                // Verificar si todas las preguntas están respondidas
+                let allAnswered = true;
+                for (let i = 1; i <= 8; i++) {
+                    if (!document.querySelector(`input[name="p${i}"]:checked`)) {
+                        allAnswered = false;
+                        break;
+                    }
+                }
+                
+                if (!allAnswered) {
+                    alert('Por favor, responde todas las preguntas antes de evaluar.');
+                    return;
+                }
+                
+                // Calcular puntuación total
+                let totalScore = 0;
+                for (let i = 1; i <= 8; i++) {
+                    const selectedValue = document.querySelector(`input[name="p${i}"]:checked`).value;
+                    totalScore += parseInt(selectedValue);
+                }
+                
+                // Determinar resultado
+                let resultText = '';
+                let titleText = '';
+                
+                if (totalScore >= 35) {
+                    titleText = '¡Eres un SUPER amigo! 🎉';
+                    resultText = 'Tienes unas habilidades sociales excepcionales. Tus amigos tienen mucha suerte de contar contigo. Sigue siendo ese pilar de apoyo y comprensión que tanto valoran.';
+                } else if (totalScore >= 25) {
+                    titleText = 'Vas por buen camino 💪';
+                    resultText = 'Tienes buenas habilidades sociales y eres un amigo valioso. Hay algunos aspectos que puedes pulir, pero en general tus relaciones son sólidas y significativas.';
+                } else {
+                    titleText = 'Oportunidad para mejorar 🌱';
+                    resultText = 'Todos podemos crecer en nuestras relaciones. Identifica áreas específicas donde puedas mejorar y trabaja en ellas. La amistad es un músculo que se fortalece con la práctica.';
+                }
+                
+                // Obtener nivel amiguístico seleccionado
+                const selectedLevel = document.querySelector('input[name="nivel"]:checked');
+                const levelText = selectedLevel ? selectedLevel.value : 'No seleccionado';
+                
+                // Formatear nivel para mostrar
+                let formattedLevel = '';
+                switch(levelText) {
+                    case 'principiante':
+                        formattedLevel = 'Principiante';
+                        break;
+                    case 'confiable':
+                        formattedLevel = 'Compañero Fiable';
+                        break;
+                    case 'alma':
+                        formattedLevel = 'Alma de la Amistad';
+                        break;
+                    case 'sabio':
+                        formattedLevel = 'Sabio de los Vínculos';
+                        break;
+                    default:
+                        formattedLevel = 'Nivel no seleccionado';
+                }
+                
+                // Mostrar resultados
+                totalScoreEl.textContent = totalScore;
+                resultTitle.textContent = titleText;
+                resultDescription.textContent = resultText;
+                amiguisticLevel.textContent = `Nivel Amiguístico: ${formattedLevel}`;
+                
+                // Mostrar sección de resultados
+                resultsSection.style.display = 'block';
+                
+                // Desplazarse a los resultados
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            restartBtn.addEventListener('click', function() {
+                // Reiniciar formulario
+                document.getElementById('friendship-form').reset();
+                
+                // Ocultar resultados
+                resultsSection.style.display = 'none';
+                
+                // Desplazarse al inicio
+                document.querySelector('header').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
